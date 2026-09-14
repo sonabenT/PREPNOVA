@@ -4,6 +4,7 @@ import PyPDF2
 import re
 import os
 import io
+from werkzeug.security import generate_password_hash
 
 
 app = Flask(__name__)
@@ -33,6 +34,15 @@ class Interview(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     feedback = db.Column(db.Text)
     taken_at = db.Column(db.DateTime, server_default=db.func.now())
+
+
+with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(username='admin').first():
+        hashed_pw = generate_password_hash('admin123')
+        db.session.add(User(username='admin', password=hashed_pw))
+        db.session.commit()
+        print("Default admin user created!")
 
 @app.route('/')
 @app.route('/login')
