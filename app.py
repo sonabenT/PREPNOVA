@@ -4,7 +4,7 @@ import PyPDF2
 import re
 import os
 import io
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
