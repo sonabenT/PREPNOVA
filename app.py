@@ -4,7 +4,7 @@ import PyPDF2
 import re
 import os
 import io
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 
 app = Flask(__name__)
@@ -39,14 +39,25 @@ class Interview(db.Model):
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(username='admin').first():
-        hashed_pw = generate_password_hash('admin123')
+        hashed_pw = check_password_hash('admin123')
         db.session.add(User(username='admin', password=hashed_pw))
         db.session.commit()
         print("Default admin user created!")
 
 @app.route('/')
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return redirect(url_for('dashboard'))
+            
+        return "Invalid username or password", 401
+        
     return render_template('login.html')
 
 @app.route('/dashboard')
