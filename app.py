@@ -39,7 +39,7 @@ class Interview(db.Model):
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(username='admin').first():
-        hashed_pw = check_password_hash('admin123')
+        hashed_pw = generate_password_hash('admin123')
         db.session.add(User(username='admin', password=hashed_pw))
         db.session.commit()
         print("Default admin user created!")
