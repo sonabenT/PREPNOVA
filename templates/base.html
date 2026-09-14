@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Placement Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/login">Login</a> |
+        <a href="/dashboard">Dashboard</a> |
+        <a href="/assessment">Assessment</a> |
+        <a href="/interview">Interview</a>
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
+

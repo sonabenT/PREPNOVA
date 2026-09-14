@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Mock Interview</h1>
+<p>Difficulty: <strong>{{ difficulty }}</strong> | Score: {{ score }} / {{ asked }}</p>
+
+{% if feedback %}
+<p><strong>{{ feedback }}</strong></p>
+{% endif %}
+
+<form method="POST">
+    <p>{{ question.q }}</p>
+    {% for option in question.options %}
+    <label>
+        <input type="radio" name="answer" value="{{ option }}" required>
+        {{ option }}
+    </label><br>
+    {% endfor %}
+    <input type="hidden" name="correct_answer" value="{{ question.answer }}">
+    <br>
+    <button type="submit">Submit Answer</button>
+</form>
+
+<p><a href="{{ url_for('interview_reset') }}">Restart Interview</a></p>
+{% endblock %}
