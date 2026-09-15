@@ -1,0 +1,14 @@
+# Database files
+*.db
+*.sqlite3
+instance/
+
+# Python virtual environment and cache
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Environment variables and OS files
+.env
+.DS_Store
