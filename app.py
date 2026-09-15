@@ -59,6 +59,21 @@ def login():
         return "Invalid username or password", 401
         
     return render_template('login.html')
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        new_password = request.form.get('new_password')
+        
+        user = User.query.filter_by(username=username).first()
+        if user:
+            user.password = generate_password_hash(new_password)
+            db.session.commit()
+            return redirect(url_for('login'))
+            
+        return "User not found", 404
+        
+    return render_template('forgot_password.html')
 
 @app.route('/dashboard')
 def dashboard():
