@@ -11,6 +11,9 @@ app = Flask(__name__)
 app.secret_key = 'dev-secret-key-change-later'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///placement_coach.db'
 db = SQLAlchemy(app)
+with app.app_context():
+    db.create_all()
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
