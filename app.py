@@ -11,8 +11,7 @@ app = Flask(__name__)
 app.secret_key = 'dev-secret-key-change-later'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///placement_coach.db'
 db = SQLAlchemy(app)
-with app.app_context():
-    db.create_all()
+
 
 
 class User(db.Model):
@@ -39,14 +38,14 @@ class Interview(db.Model):
     feedback = db.Column(db.Text)
     taken_at = db.Column(db.DateTime, server_default=db.func.now())
 
-
 with app.app_context():
     db.create_all()
+
     if not User.query.filter_by(username='admin').first():
-        hashed_pw = generate_password_hash('admin123')
-        db.session.add(User(username='admin', password=hashed_pw))
-        db.session.commit()
-        print("Default admin user created!")
+       hashed_pw = generate_password_hash('admin123')
+       db.session.add(User(username='admin', password=hashed_pw, assessment_completed=True))
+       db.session.commit()
+       print("Default admin user created!")
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,6 +88,9 @@ def dashboard():
 def assessment():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    user = User.query.get(session['user_id'])
+    if user.assessment_completed:
+        return redirect(url_for('interview'))
     return render_template('assessment.html')
 
 import random
