@@ -62,10 +62,14 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     return render_template('dashboard.html')
 
 @app.route('/assessment')
 def assessment():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     return render_template('assessment.html')
 
 import random
@@ -87,6 +91,8 @@ QUESTIONS = {
 
 @app.route('/interview', methods=['GET', 'POST'])
 def interview():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     if 'difficulty' not in session:
         session['difficulty'] = 'medium'
         session['score'] = 0
